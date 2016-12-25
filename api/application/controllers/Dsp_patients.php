@@ -46,7 +46,8 @@ class Dsp_patients extends CI_Controller {
         $res = array();
         if($this->auth_model->IsLogin()) {
             $res['auth'] = 1;
-            $res['patients'] = $this->patient_model->GetPatients();
+            $res['patients']['rows'] = $this->patient_model->GetPatients();
+            $res['patients']['total'] = count($this->patient_model->GetPatients());
         } else {
             $res['auth'] = 0;
         }

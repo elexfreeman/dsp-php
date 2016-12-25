@@ -70,31 +70,7 @@
                                 <p class="category">Список пациентов из [OMS].[dbo].[OMSC_INSURED]</p>
                             </div>
                             <div class="content table-responsive table-full-width">
-                                <table class="table table-striped">
-                                    <thead>
-
-                                    <tr>
-
-                                        <th>Фамилия</th>
-                                        <th>Имя</th>
-                                        <th>Отчество</th>
-                                        <th class="text-center">Дата рождения</th>
-
-                                        <th>ЛПУ</th>
-                                    </tr></thead>
-                                    <tbody>
-                                    <tr ng-repeat="patient in patients">
-                                        <td ng-bind="patient.SURNAME"></td>
-                                        <td ng-bind="patient.NAME"></td>
-                                        <td ng-bind="patient.SECNAME"></td>
-                                        <td class="text-center" ng-bind="patient.BIRTHDAY | dateFormat"></td>
-                                        <td ng-bind="patient.LPUBASE"></td>
-
-                                    </tr>
-
-                                    </tbody>
-                                </table>
-
+                                <table class="table table-striped" bs-table-control="bsTable"></table>
                             </div>
                         </div>
                     </div>

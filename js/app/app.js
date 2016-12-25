@@ -5,7 +5,7 @@ var base_url = '/dsp/';
 var controllers_url = '/dsp/js/app/controllers/';
 /* App Module */
 
-var dspApp = angular.module('dspApp', ['ngAnimate','ngResource','ngSanitize','ngRoute', 'httpPostFix']);
+var dspApp = angular.module('dspApp', ['ngAnimate','ngResource','ngSanitize','ngRoute', 'httpPostFix','bsTable']);
 
 dspApp.config([
     '$routeProvider', '$locationProvider',
