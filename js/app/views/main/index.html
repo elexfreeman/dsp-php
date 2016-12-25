@@ -66,8 +66,8 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="header">
-                                <h4 class="title">Пацтенты</h4>
-                                <p class="category">Вот такой списокчег из [OMS].[dbo].[OMSC_INSURED]</p>
+                                <h4 class="title">Пациенты</h4>
+                                <p class="category">Список пациентов из [OMS].[dbo].[OMSC_INSURED]</p>
                             </div>
                             <div class="content table-responsive table-full-width">
                                 <table class="table table-striped">
@@ -84,11 +84,11 @@
                                     </tr></thead>
                                     <tbody>
                                     <tr ng-repeat="patient in patients">
-                                        <td ng-bind="patient[0]"></td>
-                                        <td ng-bind="patient[1]"></td>
-                                        <td ng-bind="patient[2]"></td>
-                                        <td class="text-center" ng-bind="patient[3] | dateFormat"></td>
-                                        <td ng-bind="patient[4]"></td>
+                                        <td ng-bind="patient.SURNAME"></td>
+                                        <td ng-bind="patient.NAME"></td>
+                                        <td ng-bind="patient.SECNAME"></td>
+                                        <td class="text-center" ng-bind="patient.BIRTHDAY | dateFormat"></td>
+                                        <td ng-bind="patient.LPUBASE"></td>
 
                                     </tr>
 

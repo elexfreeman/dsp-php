@@ -114,5 +114,17 @@ class Elex
         return $data;
     }
 
+    /*переформатирует mssql строку*/
+    function result_array($query) {
+        $res = array();
+        while ($row = $query->fetch(PDO::FETCH_ASSOC)){
+
+            foreach ($row as $key=>$value) {
+                $row[$key] = mb_convert_encoding($row[$key],"UTF-8","Windows-1251");
+            }
+            $res[] = $row;
+        }
+        return $res;
+    }
 
 }

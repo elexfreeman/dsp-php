@@ -36,14 +36,9 @@ class Patient_model extends CI_Model
  from ".$this->patient_table;
 
         $query = $this->db_mssql->conn_id->query($sql);
-        while ($row = $query->fetch(PDO::FETCH_NUM)){
+        /*http://proft.me/2008/11/28/primery-ispolzovaniya-pdo/*/
 
-            foreach ($row as $key=>$value) {
-                $row[$key] = mb_convert_encoding($row[$key],"UTF-8","Windows-1251");
-            }
-            $res[] = $row;
-        }
-        return $res;
+        return $this->elex->result_array($query);
 
     }
 
