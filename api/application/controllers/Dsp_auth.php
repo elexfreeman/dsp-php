@@ -19,8 +19,6 @@ class Dsp_auth extends CI_Controller {
     }
 
 
-
-
     public function index()
     {
 
@@ -39,18 +37,13 @@ class Dsp_auth extends CI_Controller {
     public function login()
     {
         $auth=$this->auth_model->GetUserByNameAndPass($_POST['username'],$_POST['password']);
-       if( $auth->login==$_POST['username'])
+        if( $auth['username']==$_POST['username'])
         {
-
             $this->session->set_userdata('auth', $auth);
-            header('Location: '.base_url());
-            exit;
+            echo json_encode(['status'=>1]);
         }
         else
-        {
-            header('Location: '.base_url('auth'));
-            exit;
-        }
+            echo json_encode(['status'=>0]);
     }
 
     /*проверка на существование пользователя*/
@@ -201,7 +194,7 @@ class Dsp_auth extends CI_Controller {
     public function logout()
     {
         unset($_SESSION['auth']);
-        header('Location: '.base_url('auth'));
-        exit;
+        echo json_encode(['status'=>1]);
+
     }
 }

@@ -11,7 +11,10 @@
 
 class Auth_model extends CI_Model
 {
-
+    /*нужно создать в системный dsn
+    скачать ODBC Driver 11 for SQL Server
+    */
+//'dsn'	=> 'odbc:driver={ODBC Driver 11 for SQL Server}; DSN=mssql1;SERVER=10.2.22.5; host=10.2.22.5;dbname=DISP_WEB"',
 
     public $UsersTable = '[DISP_WEB].[dbo].[users]';
     public $auth;
@@ -20,8 +23,9 @@ class Auth_model extends CI_Model
     public function __construct()
     {
 
-        $this->db = $this->load->database('srv224', TRUE);
+        $this->db_mssql = $this->load->database('default',true);
         $this->load->helper('url');
+        $this->load->library('elex');
         if($this->session->has_userdata('auth'))
         {
             $auth = $this->session->has_userdata('auth');
@@ -57,14 +61,34 @@ class Auth_model extends CI_Model
     /*Проверка на существование юзера*/
     function IsUserExist($login)
     {
-        $login=$this->security->xss_clean($login);
-        $sql="select count(*) cc from ".$this->UsersTable." where login='".$login."'";
+        $login=$this->elex->ms_escape_string($login);
+        $sql="select count(*) cc from ".$this->UsersTable." where username='".$login."'";
 
-        $query = $this->dbMySQL->query($sql);
-        $row=$query->result_array();
-        $row = $row[0];
+        $query = $this->db->query($sql);
+        $row = $query->row_array();
         if((int)$row['cc']>0) return true; else return false;
     }
+
+
+    /*Проверка на существование юзера*/
+    public function  GetUserByNameAndPass($username,$password)
+    {
+
+        $username = $this->elex->ms_escape_string($username);
+        $password = $this->elex->ms_escape_string($password);
+        $sql="select * from ".$this->UsersTable.
+            " where (username='".$username."') and (password = '".$password."')";
+
+
+        $query = $this->db_mssql->query($sql);
+        $row = $query->row_array();
+
+        if(isset($row)) {
+            unset($row['password']);
+        }
+        return $row;
+    }
+
 
     /*Вставляет юзера с рандомным паролем*/
     public function AddUser($login)
@@ -127,23 +151,7 @@ class Auth_model extends CI_Model
         return $row;
     }
 
-    /*Проверка на существование юзера*/
-    public function  GetUserByNameAndPass($username,$password)
-    {
-        $username=$this->security->xss_clean($username);
-        $password=$this->security->xss_clean($password);
-        $query = $this->dbMySQL->get_where('ipre_users', array('login' => $username,'password' => $password));
 
-
-        $row=$query->result_array();
-
-        $row = $row[0];
-        $res = new stdClass();
-        $res->login = $row['login'];
-        $res->password = $row['password'];
-
-        return $res;
-    }
      /*Проверка на существование юзера*/
     public function  GetUserByName($username)
     {

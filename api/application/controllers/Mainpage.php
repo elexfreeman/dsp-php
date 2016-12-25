@@ -38,7 +38,6 @@ class Mainpage extends CI_Controller {
     {
         parent::__construct();
 
-        parent::__construct();
         /*Загружаем  библиотеку сессий*/
         $this->load->library('session');
 
@@ -51,8 +50,7 @@ class Mainpage extends CI_Controller {
         $this->load->helper('url');
 
         $this->load->model('auth_model');
-        $this->load->model('ipre_model');
-        $this->load->model('patient_model');
+
     }
 
 	public function index()
