@@ -36,6 +36,7 @@ class Dsp_auth extends CI_Controller {
     /*Событие входа пользователя*/
     public function login()
     {
+
         $auth=$this->auth_model->GetUserByNameAndPass($_POST['username'],$_POST['password']);
         if( $auth['username']==$_POST['username'])
         {

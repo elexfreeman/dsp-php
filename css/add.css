@@ -1,0 +1,15 @@
+.card.login-page{
+    margin: 10vh auto;
+    width: 400px;
+
+}
+
+.section.login-section {
+    height: 100vh;
+    background-color: #f4f3ef;
+    background-image: linear-gradient(to bottom, transparent 0%, rgba(112, 112, 112, 0) 60%, rgba(186, 186, 186, 0.15) 100%);
+}
+
+.pointer {
+    cursor:pointer;
+}

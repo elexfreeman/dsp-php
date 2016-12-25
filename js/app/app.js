@@ -1,10 +1,11 @@
 'use strict';
 var api_url = '/dsp/api/';
 var views_url = '/dsp/js/app/views/';
+var base_url = '/dsp/';
 var controllers_url = '/dsp/js/app/controllers/';
 /* App Module */
 
-var dspApp = angular.module('dspApp', ['ngAnimate','ngResource','ngSanitize','ngRoute']);
+var dspApp = angular.module('dspApp', ['ngAnimate','ngResource','ngSanitize','ngRoute', 'httpPostFix']);
 
 dspApp.config([
     '$routeProvider', '$locationProvider',
@@ -54,6 +55,7 @@ dspApp.run(function($rootScope,$templateCache, $http) {
             $templateCache.put(views_url + 'login/index.html', response.data);
         });
 
+    $rootScope.exit_link = base_url + 'api/dsp_auth/logout';
 
 });
 

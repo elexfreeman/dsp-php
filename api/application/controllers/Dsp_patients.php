@@ -14,6 +14,7 @@ class Dsp_patients extends CI_Controller {
         $this->load->library('functions');
         $this->load->library('form_validation');
         $this->load->model('auth_model');
+        $this->load->model('patient_model');
         $this->load->helper('form');
         $this->load->helper('url');
     }
@@ -25,5 +26,35 @@ class Dsp_patients extends CI_Controller {
     {
 
     }
+
+
+
+    /*выдат исходные настройки*/
+    public function GetDashboard() {
+        /*проверяем аториз*/
+        $res = array();
+        if($this->auth_model->IsLogin()) {
+            $res['auth'] = 1;
+        } else {
+            $res['auth'] = 0;
+        }
+
+        echo json_encode($res);
+    }
+
+    public function GetPatients() {
+        $res = array();
+        if($this->auth_model->IsLogin()) {
+            $res['auth'] = 1;
+            $res['patients'] = $this->patient_model->GetPatients();
+        } else {
+            $res['auth'] = 0;
+        }
+
+        echo json_encode($res);
+    }
+
+
+
 
 }
