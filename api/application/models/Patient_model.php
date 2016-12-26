@@ -23,20 +23,35 @@ class Patient_model extends CI_Model
         $this->load->library('elex');
     }
 
-    public function GetPatients() {
+    public function GetPatients($arg,$limit,$offset) {
 
-        $sql="select top 100
+        $limit = (int)$limit;
+        $offset = (int)$offset;
 
-      [SURNAME]
-      ,[NAME]
-      ,[SECNAME]
-      ,[BIRTHDAY]
-      ,[LPUBASE]
 
- from ".$this->patient_table;
+        /*сортировка*/
+        $order_by=' order by surname ';
+        if(isset($arg['sort']))
+        $order_by = ' order by '.$arg['sort']." ".$arg['order'];
+
+        $sql="select *
+from
+(select ROW_NUMBER() over(".$order_by.") as rn, *,
+
+(select count(*) from oms..OMSC_INSURED
+where d_fin is null and lpuchief = ".$arg['lpucode'].") as total
+
+from oms..OMSC_INSURED
+where (d_fin is null) and (lpuchief = ".$arg['lpucode'].")
+
+) x
+where rn between ".$offset." and ".($offset+$limit)."
+";
+
 
         $query = $this->db_mssql->conn_id->query($sql);
         /*http://proft.me/2008/11/28/primery-ispolzovaniya-pdo/*/
+
 
         return $this->elex->result_array($query);
 

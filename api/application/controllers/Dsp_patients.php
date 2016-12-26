@@ -46,8 +46,32 @@ class Dsp_patients extends CI_Controller {
         $res = array();
         if($this->auth_model->IsLogin()) {
             $res['auth'] = 1;
-            $res['patients']['rows'] = $this->patient_model->GetPatients();
-            $res['patients']['total'] = count($this->patient_model->GetPatients());
+            $res['user'] = $this->auth_model->UserInfo();
+
+            $data = $this->input->post('data');
+            $patient = $this->input->post('patient');
+
+            if($data!='') {
+                $arg=array();
+
+                $arg['lpucode'] = $res['user']['lpucode'];
+                if((isset($data['sort']))and($data['sort']!=''))
+                    $arg['sort'] = $data['sort'];
+                else $arg['sort'] = 'surname';
+                $arg['order'] = $data['order'];
+
+                if(!isset($data['limit']))  $data['limit'] = 100;
+                if(!isset($data['offset']))  $data['offset'] = 0;
+
+                /*только 400 записей максимум*/
+                if((int)$data['limit']>400) $data['limit'] = 400;
+                if((int)$data['offset']<0) $data['offset'] = 0;
+
+                $res['patients']['rows'] = $this->patient_model->GetPatients($arg,$data['limit'],$data['offset']);
+                if(count($res['patients']['rows'])>0)
+                    $res['patients']['total'] = $res['patients']['rows'][0]['total'];
+            }
+
         } else {
             $res['auth'] = 0;
         }

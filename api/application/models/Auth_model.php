@@ -28,11 +28,11 @@ class Auth_model extends CI_Model
         $this->load->library('elex');
         if($this->session->has_userdata('auth'))
         {
-            $auth = $this->session->has_userdata('auth');
+            $this->auth = $this->session->userdata('auth');
         }
         else
         {
-            $auth=false;
+            $this->auth=false;
         }
     }
 

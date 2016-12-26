@@ -24,6 +24,14 @@ dspApp.config([
                 templateUrl:views_url + 'main/index.html',
                 controller:'mainCtrl'
             })
+            .when('/dsp/dispPlan',{
+                templateUrl:views_url + 'plans/dispPlan.html',
+                controller:'dispPlan'
+            })
+            .when('/dsp/proflPlan',{
+                templateUrl:views_url + 'plans/proflPlan.html',
+                controller:'proflPlan'
+            })
             /*личный кабинет*/
             .when('/dsp/login',{
                 templateUrl:views_url + 'login/index.html',
