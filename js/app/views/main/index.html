@@ -15,19 +15,23 @@
 
             <ul class="nav">
                 <li class="active">
-                    <a href="/">
+                    <a href="" ng-click="toLink('')">
                         <i class="ti-panel"></i>
                         <p>Рабочий стол</p>
                     </a>
                 </li>
                 <li>
-                    <a href="user.html">
-                        <i class="ti-user"></i>
-                        <p>ЛПУ 2101</p>
+                    <a href="" ng-click="toLink('dispPlan')">
+                        <i class="ti-pie-chart"></i>
+                        <p>План по диспансеризации</p>
                     </a>
                 </li>
-
-
+                <li>
+                    <a href="" ng-click="toLink('proflPlan')">
+                        <i class="ti-support"></i>
+                        <p>План по профилактическим осмотрам</p>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
@@ -62,173 +66,59 @@
 
         <div class="content">
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="card">
-                            <div class="content">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <div class="icon-big icon-warning text-center">
-                                            <i class="ti-server"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-9">
-                                        <div class="numbers">
-                                            <p>Плановое кол-во</p>
-                                            10000
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="footer">
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="ti-book"></i> в соответствии с планом МЗ СО
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="card">
-                            <div class="content">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <div class="icon-big icon-warning text-center">
-                                            <i class="ti-info"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-9">
-                                        <div class="numbers">
-                                            <p>Общее кол-во</p>
-                                            500
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="footer">
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="ti-book"></i> подлежат диспансеризации по РС ЕРЗЛ
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="card">
-                            <div class="content">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <div class="icon-big icon-success text-center">
-                                            <i class="ti-check"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-9">
-                                        <div class="numbers">
-                                            <p>Кол-во отмеченных</p>
-                                            500
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="footer">
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="ti-book"></i> для включения в план
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="card">
-                            <div class="content">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <div class="icon-big icon-info text-center">
-                                            <i class="ti-pie-chart"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-9">
-                                        <div class="numbers">
-                                            <p>% отмеченных</p>
-                                            500
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="footer">
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="ti-book"></i> от общего кол-ва
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                </div>
                 <div class="row">
-                    <div class="col-md-12">
-                        <div class="card patients-table" >
+                    <div class="col-md-6">
+                        <div class="card pointer" ng-click="toLink('dispPlan')">
                             <div class="header">
-                                <h4 class="title">Пациенты</h4>
-                                <p class="category">отфильтруйте пациентов для формирования плана</p>
-                                <form>
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label style="display: block;">Возраст с - по:</label>
-                                                <div class="col-sm-6">
-                                                    <select class="form-control border-input" ng-model="patient.age_start" >
-                                                        <option ng-repeat="age in age_list" value="{{age}}">{{age}}</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <select class="form-control border-input" ng-model="patient.age_end" >
-                                                        <option ng-repeat="age in age_list" value="{{age}}">{{age}}</option>
-                                                    </select>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Участок прикрепления:</label>
-                                                <div class="col-sm-12">
-                                                    <input type="text" class="form-control border-input" ng-model="patient.TMODOC">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Участковый врач:</label>
-                                                <div class="col-sm-12">
-                                                    <input type="text" class="form-control border-input" ng-model="patient.DOCTOR">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Месяц даты рождения с - по:</label>
-                                                <div class="col-sm-6">
-                                                    <select class="form-control border-input col-sm-6" ng-model="patient.month_start" >
-                                                        <option ng-repeat="month in month_list" value="{{month.m}}">{{month.month}}</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <select class="form-control border-input col-sm-6" ng-model="patient.month_end" >
-                                                        <option ng-repeat="month in month_list" value="{{month.m}}">{{month.month}}</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
+                                <h4 class="title">План по диспансеризации</h4>
+                                <p class="category">Last Campaign Performance</p>
                             </div>
-                            <div class="content table-responsive table-full-width">
-                                <table class="table table-striped" bs-table-control="bsTable"></table>
+                            <div class="content">
+                                <div id="chartPreferences" class="ct-chart ct-perfect-fourth">
+
+                                </div>
+
+                                <div class="footer">
+                                    <div class="chart-legend">
+                                        <i class="fa fa-circle text-info"></i> Open
+                                        <i class="fa fa-circle text-danger"></i> Bounce
+                                        <i class="fa fa-circle text-warning"></i> Unsubscribe
+                                    </div>
+                                    <hr>
+                                    <div class="stats">
+                                        <i class="ti-timer"></i> Campaign sent 2 days ago
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                    <div class="col-md-6">
+                        <div class="card pointer" ng-click="toLink('proflPlan')">
+                            <div class="header">
+                                <h4 class="title">План по профилактическим осмотрам</h4>
+                                <p class="category">Last Campaign Performance</p>
+                            </div>
+                            <div class="content">
+                                <div id="chartPreferences" class="ct-chart ct-perfect-fourth">
+
+                                </div>
+
+                                <div class="footer">
+                                    <div class="chart-legend">
+                                        <i class="fa fa-circle text-info"></i> Open
+                                        <i class="fa fa-circle text-danger"></i> Bounce
+                                        <i class="fa fa-circle text-warning"></i> Unsubscribe
+                                    </div>
+                                    <hr>
+                                    <div class="stats">
+                                        <i class="ti-timer"></i> Campaign sent 2 days ago
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
             </div>
         </div>
 

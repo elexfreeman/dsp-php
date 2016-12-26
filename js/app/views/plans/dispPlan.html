@@ -14,20 +14,24 @@
             </div>
 
             <ul class="nav">
-                <li class="active">
-                    <a href="/">
+                <li>
+                    <a href="" ng-click="toLink('')">
                         <i class="ti-panel"></i>
                         <p>Рабочий стол</p>
                     </a>
                 </li>
-                <li>
-                    <a href="user.html">
-                        <i class="ti-user"></i>
-                        <p>ЛПУ 2101</p>
+                <li class="active">
+                    <a href="" ng-click="toLink('dispPlan')">
+                        <i class="ti-pie-chart"></i>
+                        <p>План по диспансеризации</p>
                     </a>
                 </li>
-
-
+                <li>
+                    <a href="" ng-click="toLink('proflPlan')">
+                        <i class="ti-support"></i>
+                        <p>План по профилактическим осмотрам</p>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

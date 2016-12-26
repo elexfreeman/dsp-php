@@ -26,11 +26,11 @@ dspApp.config([
             })
             .when('/dsp/dispPlan',{
                 templateUrl:views_url + 'plans/dispPlan.html',
-                controller:'dispPlan'
+                controller:'dispPlanCtrl'
             })
             .when('/dsp/proflPlan',{
                 templateUrl:views_url + 'plans/proflPlan.html',
-                controller:'proflPlan'
+                controller:'proflPlanCtrl'
             })
             /*личный кабинет*/
             .when('/dsp/login',{
@@ -61,6 +61,18 @@ dspApp.run(function($rootScope,$templateCache, $http) {
         .then(function(response) {
             console.info(response);
             $templateCache.put(views_url + 'login/index.html', response.data);
+        });
+
+    $http.get(views_url + 'plans/dispPlan.html')
+        .then(function(response) {
+            console.info(response);
+            $templateCache.put(views_url + 'plans/dispPlan.html', response.data);
+        });
+
+    $http.get(views_url + 'plans/proflPlan.html')
+        .then(function(response) {
+            console.info(response);
+            $templateCache.put(views_url + 'plans/proflPlan.html', response.data);
         });
 
     $rootScope.exit_link = base_url + 'api/dsp_auth/logout';
