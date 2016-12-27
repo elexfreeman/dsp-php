@@ -17,3 +17,15 @@
 .bootstrap-table .fixed-table-container{
     height: 40vh;
 }
+
+.radio1 {
+    height: 20px;
+    width: 20px;
+    float: left;
+}
+
+.radio_text {
+    display: block;
+    float: left;
+    padding-left: 10px;
+}
