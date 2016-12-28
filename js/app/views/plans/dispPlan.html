@@ -146,12 +146,12 @@
                                             <div class="form-group">
                                                 <label style="display: block;">Возраст с - по:</label>
                                                 <div class="col-sm-6">
-                                                    <select class="form-control border-input" ng-model="patient.age_start" >
+                                                    <select ng-change="RefreshFilter()" class="form-control border-input" ng-model="patient.age_beg" >
                                                         <option ng-repeat="age in age_list" value="{{age}}">{{age}}</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-sm-6">
-                                                    <select class="form-control border-input" ng-model="patient.age_end" >
+                                                    <select ng-change="RefreshFilter()"  class="form-control border-input" ng-model="patient.age_end" >
                                                         <option ng-repeat="age in age_list" value="{{age}}">{{age}}</option>
                                                     </select>
                                                 </div>
@@ -162,7 +162,7 @@
                                             <div class="form-group">
                                                 <label>Участок прикрепления:</label>
                                                 <div class="col-sm-12">
-                                                    <input type="text" class="form-control border-input" ng-model="patient.TMODOC">
+                                                    <input type="text" class="form-control border-input" ng-model="patient.uch">
                                                 </div>
                                             </div>
                                         </div>
@@ -170,7 +170,9 @@
                                             <div class="form-group">
                                                 <label>Участковый врач:</label>
                                                 <div class="col-sm-12">
-                                                    <input type="text" class="form-control border-input" ng-model="patient.DOCTOR">
+                                                    <select class="form-control border-input" ng-model="patient.doc" >
+                                                        <option ng-repeat="doc in doctors" value="{{doc.DRCODE}}">{{doc.SURNAME}} {{doc.NAME}} {{doc.SECNAME}}</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -178,12 +180,12 @@
                                             <div class="form-group">
                                                 <label>Месяц даты рождения с - по:</label>
                                                 <div class="col-sm-6">
-                                                    <select class="form-control border-input col-sm-6" ng-model="patient.month_start" >
+                                                    <select ng-change="RefreshFilter()"  class="form-control border-input col-sm-6" ng-model="patient.month_beg" >
                                                         <option ng-repeat="month in month_list" value="{{month.m}}">{{month.month}}</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-sm-6">
-                                                    <select class="form-control border-input col-sm-6" ng-model="patient.month_end" >
+                                                    <select ng-change="RefreshFilter()"  class="form-control border-input col-sm-6" ng-model="patient.month_end" >
                                                         <option ng-repeat="month in month_list" value="{{month.m}}">{{month.month}}</option>
                                                     </select>
                                                 </div>
@@ -193,7 +195,7 @@
                                 </form>
                             </div>
                             <div class="content table-responsive table-full-width">
-                                <table class="table table-striped" bs-table-control="bsTable"></table>
+                                <table class="table table-striped" bs-table-control="bsTable" id="b1"></table>
                             </div>
                             <div class="content text-right" style="padding-top: 0">
                                 <button href="#fakelink" class="btn btn-fill btn-success">Взять в план всех из текущего фильтра</button>
