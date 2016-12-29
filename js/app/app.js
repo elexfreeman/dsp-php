@@ -20,20 +20,20 @@ dspApp.config([
         /*маршруты с контролеррами и view*/
         $routeProvide
             /*главная страница*/
-            .when('/dsp/',{
+            .when(base_url,{
                 templateUrl:views_url + 'main/index.html',
                 controller:'mainCtrl'
             })
-            .when('/dsp/dispPlan',{
+            .when(base_url+'dispPlan',{
                 templateUrl:views_url + 'plans/dispPlan.html',
                 controller:'dispPlanCtrl'
             })
-            .when('/dsp/proflPlan',{
+            .when(base_url+'proflPlan',{
                 templateUrl:views_url + 'plans/proflPlan.html',
                 controller:'proflPlanCtrl'
             })
             /*личный кабинет*/
-            .when('/dsp/login',{
+            .when(base_url+'login',{
                 templateUrl:views_url + 'login/index.html',
                 controller:'loginCtrl'
             })
@@ -76,6 +76,8 @@ dspApp.run(function($rootScope,$templateCache, $http) {
         });
 
     $rootScope.exit_link = base_url + 'api/dsp_auth/logout';
+
+
 
 });
 
