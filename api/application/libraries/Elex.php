@@ -114,7 +114,7 @@ class Elex
         return $data;
     }
 
-    /*переформатирует mssql строку*/
+    /*переформатирует mssql строки*/
     function result_array($query) {
         $res = array();
         while ($row = $query->fetch(PDO::FETCH_ASSOC)){
@@ -126,5 +126,19 @@ class Elex
         }
         return $res;
     }
+
+     /*переформатирует mssql строку*/
+    function row_array($query) {
+        $row = $query->fetch(PDO::FETCH_ASSOC);
+
+        foreach ($row as $key=>$value) {
+            $row[$key] = mb_convert_encoding($row[$key],"UTF-8","Windows-1251");
+        }
+
+
+        return $row;
+    }
+
+
 
 }

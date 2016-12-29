@@ -149,6 +149,20 @@ class Dsp_patients extends CI_Controller {
         echo json_encode($res);
     }
 
+    /*План дисп на год по зареганому лу*/
+    public function GetDspPlanForYear($year){
+        $res = array();
+        if($this->auth_model->IsLogin()) {
+            $res['auth'] = 1;
+            $res['user'] = $this->auth_model->UserInfo();
+            $res['DspPlanForYear'] = $this->patient_model->GetDspPlanForYear($res['user']['lpucode'],$year);
+
+        } else {
+            $res['auth'] = 0;
+        }
+        echo json_encode($res);
+    }
+
 
 
 }

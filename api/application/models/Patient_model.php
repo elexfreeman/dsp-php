@@ -166,6 +166,7 @@ select count(*) cc
 from
 (select year(getdate()) - year(i.BIRTHDAY) as vozr,
  ROW_NUMBER() over(order by i.surname) as rn,
+ ROW_NUMBER() over(partition by i.enp  order by id desc) as nom,
  null as user_id,
 
  2017 as  disp_year,
@@ -178,6 +179,7 @@ from
  i.type_u as typeui,
 
  i. enp,
+
 
 (select count(*) from oms..OMSC_INSURED_SREZ
 where d_fin is null
@@ -237,7 +239,9 @@ where i.d_fin is null
 
 	-- having drcode = @drcode
 ) x
+where nom = 1
 ";
+
 
         $query = $this->db_mssql->conn_id->query($sql);
         /*http://proft.me/2008/11/28/primery-ispolzovaniya-pdo/*/
@@ -265,6 +269,17 @@ where i.d_fin is null
 where (pld.D_FIN is null)and(pld.LPUCHIEF = ".$lpucode.")";
         $query = $this->db_mssql->conn_id->query($sql);
         return $this->elex->result_array($query);
+    }
+
+    /*выдает участки в лпу*/
+    function GetDspPlanForYear($lpucode,$year) {
+        $lpucode = (int)$lpucode;
+        $year = (int)$year;
+        $sql = "
+    SELECT *
+  FROM [DISP_WEB].[dbo].[plan_mzso] plan_m where (plan_m.lpucode = ".$lpucode.") and (plan_m.year = ".$year.")";
+        $query = $this->db_mssql->conn_id->query($sql);
+        return $this->elex->row_array($query);
     }
 
 }

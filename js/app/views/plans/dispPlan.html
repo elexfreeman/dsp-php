@@ -8,7 +8,7 @@
 
         <div class="sidebar-wrapper">
             <div class="logo">
-                <a href="http://www.creative-tim.com" class="simple-text">
+                <a href=""  ng-click="toLink('')" class="simple-text">
                     МИАЦ - диспансеризация
                 </a>
             </div>
@@ -80,7 +80,7 @@
                                     <div class="col-xs-9">
                                         <div class="numbers">
                                             <p>Плановое кол-во в соответствии с планом МЗ СО</p><hr>
-                                            2 900
+                                            {{DspPlanForYear.plan_count  | priceFormat}}
                                         </div>
                                     </div>
                                 </div>
