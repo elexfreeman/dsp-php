@@ -70,3 +70,12 @@
     margin-bottom: 10px;
 }
 
+
+.loader-file{
+    display: inline-block;
+}
+
+.content.loader{
+    height: 70vh;
+    padding-top: 25vh;
+}

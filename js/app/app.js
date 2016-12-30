@@ -37,6 +37,11 @@ dspApp.config([
                 templateUrl:views_url + 'login/index.html',
                 controller:'loginCtrl'
             })
+            /*Загрузка среза*/
+            .when(base_url+'loader',{
+                templateUrl:views_url + 'loader/loader.html',
+                controller:'loaderCtrl'
+            })
             /*другая страница*/
             /*todo 303 redirect*/
             .otherwise({
