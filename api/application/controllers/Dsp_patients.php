@@ -163,6 +163,53 @@ class Dsp_patients extends CI_Controller {
         echo json_encode($res);
     }
 
+    /*выдает пациента по его енп привзанного к зареганному юзеру*/
+    public function get_patient($enp)
+    {
+        $res = array();
+        if ($this->auth_model->IsLogin()) {
+            $res['auth'] = 1;
+            $res['user'] = $this->auth_model->UserInfo();
+            $res['patient'] = $this->patient_model->GetPatientByEnp($enp);
+
+        } else {
+            $res['auth'] = 0;
+        }
+        echo json_encode($res);
+    }
+
+    /*вставляет статус пациетна о дисп*/
+    public function setstatus(){
+        $res = array();
+        if ($this->auth_model->IsLogin()) {
+            $res['auth'] = 1;
+            $res['user'] = $this->auth_model->UserInfo();
+            $arg = array();
+            $arg['enp'] = $this->input->post('patient_enp');
+            $arg['status'] = $this->input->post('status');
+            $arg['disp_year'] = $this->input->post('disp_year');
+            $arg['disp_quarter'] = $this->input->post('disp_quarter');
+            $arg['disp_type'] = 1;
+            $arg['disp_lpu'] = $res['user']['lpucode'];
+            $arg['age'] = 1;
+            $arg['lgg_code'] = 1;
+            $arg['drcode'] = 1;
+            $arg['refusal_reason'] = 1;
+            $arg['disp_start'] = '';
+            $arg['stage_1_result'] = '';
+            $arg['stage_2_result'] = '';
+            $arg['guid'] = '';
+            $arg['speccode'] = '';
+
+            $this->patient_model->InsertPatientStatus($arg);
+
+
+        } else {
+            $res['auth'] = 0;
+        }
+        echo json_encode($res);
+    }
+
 
 
 }

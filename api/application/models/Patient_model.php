@@ -102,8 +102,10 @@ where d_fin is null
 
   i.surname as surname1, i.name as name1, i.secname as secname1, i.birthday as birthday1
 
-  ,dp.[status],
-  pld.NAME
+  ,dp.[status]
+
+  ,pld.NAME
+  ,dp.[disp_quarter]
 from oms..OMSC_INSURED_SREZ i
 
 
@@ -278,6 +280,93 @@ where (pld.D_FIN is null)and(pld.LPUCHIEF = ".$lpucode.")";
         $sql = "
     SELECT *
   FROM [DISP_WEB].[dbo].[plan_mzso] plan_m where (plan_m.lpucode = ".$lpucode.") and (plan_m.year = ".$year.")";
+        $query = $this->db_mssql->conn_id->query($sql);
+        return $this->elex->row_array($query);
+    }
+
+
+    public function GetPatientByEnp($enp) {
+
+        $sql="SELECT *
+          FROM [OMS].[dbo].[OMSC_INSURED] p
+
+          where (p.ENP = '".$enp."') and (p.D_FIN is null)";
+
+        $query = $this->db_mssql->conn_id->query($sql);
+        return $this->elex->row_array($query);
+    }
+
+    public function InsertPatientStatus($arg) {
+
+        $now = date('Y-m-d H:i:s');
+
+        $sql="
+INSERT INTO [DISP_WEB].[dbo].[disp_plan]
+           ([insert_date]
+           ,[enp]
+           ,[status]
+           ,[guid]
+           ,[disp_year]
+           ,[disp_quarter]
+           ,[disp_type]
+           ,[disp_lpu]
+           ,[age]
+           ,[lgg_code]
+           ,[drcode]
+           ,[speccode]
+           ,[refusal_reason]
+           ,[disp_start]
+           ,[stage_1_result]
+           ,[stage_2_result]
+           ,[deleted])
+     VALUES
+           (
+           '".$now."'
+           ,'".$arg['enp']."'
+           ,'".$arg['status']."'
+          ,'".$arg['guid']."'
+          ,'".$arg['disp_year']."'
+          ,'".$arg['disp_quarter']."'
+          ,'".$arg['disp_type']."'
+          ,'".$arg['disp_lpu']."'
+          ,'".$arg['age']."'
+          ,'".$arg['lgg_code']."'
+          ,'".$arg['drcode']."'
+          ,'".$arg['speccode']."'
+          ,'".$arg['refusal_reason']."'
+          ,'".$arg['disp_start']."'
+          ,'".$arg['stage_1_result']."'
+          ,'".$arg['stage_2_result']."'
+          ,'0');
+";
+
+
+        $query = $this->db_mssql->conn_id->query($sql);
+    }
+
+
+    public function GetPatientStatus($enp) {
+        $sql="SELECT TOP 1 [id]
+      ,[insert_date]
+      ,[enp]
+      ,[status]
+      ,[guid]
+      ,[disp_year]
+      ,[disp_quarter]
+      ,[disp_type]
+      ,[disp_lpu]
+      ,[age]
+      ,[lgg_code]
+      ,[drcode]
+      ,[speccode]
+      ,[refusal_reason]
+      ,[disp_start]
+      ,[stage_1_result]
+      ,[stage_2_result]
+      ,[deleted]
+  FROM [DISP_WEB].[dbo].[disp_plan] p
+
+  where p.enp = '".$enp."' order by id desc";
         $query = $this->db_mssql->conn_id->query($sql);
         return $this->elex->row_array($query);
     }

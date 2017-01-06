@@ -131,14 +131,12 @@ class Elex
     function row_array($query) {
         $row = $query->fetch(PDO::FETCH_ASSOC);
 
-        foreach ($row as $key=>$value) {
-            $row[$key] = mb_convert_encoding($row[$key],"UTF-8","Windows-1251");
+        if(!($row===false)) {
+            foreach ($row as $key=>$value) {
+                $row[$key] = mb_convert_encoding($row[$key],"UTF-8","Windows-1251");
+            }
         }
-
-
         return $row;
     }
-
-
 
 }
