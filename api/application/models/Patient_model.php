@@ -102,15 +102,9 @@ where d_fin is null
 
   i.surname as surname1, i.name as name1, i.secname as secname1, i.birthday as birthday1
 
-  ,dp.[status]
-
   ,pld.NAME
-  ,dp.[disp_quarter]
+
 from oms..OMSC_INSURED_SREZ i
-
-
-left join [DISP_WEB]..disp_plan dp
-on dp.enp=i.ENP
 
 left join [POLYCLINIC_2010].[dbo].[POLM_LPU_DISTRICTS] pld
 on (pld.NUM = i.LPUBASE_U)and(pld.LPUCODE = i.LPUBASE)and(pld.D_FIN is null)
@@ -168,7 +162,6 @@ select count(*) cc
 from
 (select year(getdate()) - year(i.BIRTHDAY) as vozr,
  ROW_NUMBER() over(order by i.surname) as rn,
- ROW_NUMBER() over(partition by i.enp  order by id desc) as nom,
  null as user_id,
 
  2017 as  disp_year,
@@ -217,13 +210,11 @@ where d_fin is null
 
   i.surname as surname1, i.name as name1, i.secname as secname1, i.birthday as birthday1
 
-  ,dp.[status],
-  pld.NAME
+
+  ,pld.NAME
 from oms..OMSC_INSURED_SREZ i
 
 
-left join [DISP_WEB]..disp_plan dp
-on dp.enp=i.ENP
 
 left join [POLYCLINIC_2010].[dbo].[POLM_LPU_DISTRICTS] pld
 on (pld.NUM = i.LPUBASE_U)and(pld.LPUCODE = i.LPUBASE)and(pld.D_FIN is null)
@@ -241,7 +232,7 @@ where i.d_fin is null
 
 	-- having drcode = @drcode
 ) x
-where nom = 1
+
 ";
 
 

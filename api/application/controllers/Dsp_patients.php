@@ -83,7 +83,16 @@ class Dsp_patients extends CI_Controller {
 
                 $res['patients']['rows'] = $this->patient_model->GetPatients($arg,$data['limit'],$data['offset']);
                 if(count($res['patients']['rows'])>0)
+                {
+                    /*проставляем статус*/
+                    foreach ($res['patients']['rows'] as $key=>$p) {
+                        $res['patients']['rows'][$key]['status'] = $this->patient_model->GetPatientStatus($p['enp']);
+                    }
+
+
                     $res['patients']['total'] = $this->patient_model->GetPatientsTotal($arg);
+                }
+
             }
 
         } else {
@@ -211,5 +220,22 @@ class Dsp_patients extends CI_Controller {
     }
 
 
+    public function GetCountPatientsInPlan() {
+        $res = array();
+        if ($this->auth_model->IsLogin()) {
+            $res['auth'] = 1;
+            $res['user'] = $this->auth_model->UserInfo();
+
+            $res['pl_1'] = 0;
+            $res['pl_2'] = 0;
+            $res['pl_3'] = 0;
+            $res['pl_4'] = 0;
+
+
+        } else {
+            $res['auth'] = 0;
+        }
+        echo json_encode($res);
+    }
 
 }
