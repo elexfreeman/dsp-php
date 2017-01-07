@@ -362,4 +362,167 @@ INSERT INTO [DISP_WEB].[dbo].[disp_plan]
         return $this->elex->row_array($query);
     }
 
+    public function CheckAllFromFilter($arg) {
+
+
+
+        $lpu = (int)$arg['lpucode'];
+
+        $uch_d='';
+        $uch_w='';
+        if((isset($arg['uch']))and($arg['uch']!='')){
+            $uch_d = "declare @uch int = ".$arg['uch'].";";
+            $uch_w = " and i.LPUBASE_U = @uch";
+        };
+
+
+
+        $sql="
+declare @month_beg int = ".$arg['month_beg'].";
+declare @month_end int = ".$arg['month_end'].";
+declare @age_beg int = ".$arg['age_beg'].";
+declare @age_end int = ".$arg['age_end'].";
+declare @drcode varchar(8);
+$uch_d
+
+declare @year int = 3;
+declare @lpu int = ".$lpu.";
+select *
+from
+(select year(getdate()) - year(i.BIRTHDAY) as vozr,
+ ROW_NUMBER() over(order by i.surname) as rn,
+ null as user_id,
+
+ 2017 as  disp_year,
+ 1 as disp_type,
+ i.lpuchief as disp_lpu,
+ year(getdate()) - year(i.BIRTHDAY) as  age,
+
+ i.lpubase,
+ i.lpubase_u,
+ i.type_u as typeui,
+
+ i. enp,
+
+(select count(*) from oms..OMSC_INSURED_SREZ
+where d_fin is null
+  and lpuchief = @lpu
+  and (year(getdate()) - year(i.BIRTHDAY)) % 3 = 0
+  and year(getdate()) - year(i.BIRTHDAY) >=21
+  ".$uch_w."
+  ) as kol,
+
+
+  (select top 1 drcode
+      from aktpak..akpc_tmodoc
+	  where d_fin is null
+
+		and DBSOURCE = 'D'
+
+		and isnull(LPUTER_U,0) = isnull(i.lpubase_u,0)
+		and isnull(LPUTER,0) = isnull(i.lpubase,0)
+		and isnull(type_u,0) = isnull(i.type_u,0)
+      order by drcode
+      )  as drcode,
+  (select top 1 speccode
+      from aktpak..akpc_tmodoc
+	  where d_fin is null
+
+		and DBSOURCE = 'D'
+
+		and isnull(LPUTER_U,0) = isnull(i.lpubase_u,0)
+		and isnull(LPUTER,0) = isnull(i.lpubase,0)
+		and isnull(type_u,0) = isnull(i.type_u,0)
+      order by drcode
+      )  as speccode,
+
+  i.surname as surname1, i.name as name1, i.secname as secname1, i.birthday as birthday1
+
+  ,pld.NAME
+
+from oms..OMSC_INSURED_SREZ i
+
+left join [POLYCLINIC_2010].[dbo].[POLM_LPU_DISTRICTS] pld
+on (pld.NUM = i.LPUBASE_U)and(pld.LPUCODE = i.LPUBASE)and(pld.D_FIN is null)
+
+
+
+where i.d_fin is null
+  and i.lpuchief = @lpu
+  and (year(getdate()) - year(i.BIRTHDAY)) % 3 = 0
+  and year(getdate()) - year(i.BIRTHDAY) >= 21
+  and month(i.birthday) between @month_beg and @month_end
+  and (year(getdate()) - year(i.BIRTHDAY)) between  @age_beg and @age_end
+
+ ".$uch_w."
+
+	-- having drcode = @drcode
+) x"
+;
+
+        $query = $this->db_mssql->conn_id->query($sql);
+        /*http://proft.me/2008/11/28/primery-ispolzovaniya-pdo/*/
+
+
+        $rows = $this->elex->result_array($query);
+        /*перебераем всех и вставляем записи*/
+        echo count($rows);
+        foreach($rows as $row){
+
+            $arg1 = array();
+            $arg1['enp'] = $row['enp'];
+            $arg1['status'] = $arg['status'];
+            $arg1['disp_year'] = $arg['disp_year'];
+            $arg1['disp_quarter'] = $this->GeQuarterByDate($row['birthday1']);
+            $arg1['disp_type'] = 1;
+            $arg1['disp_lpu'] = $arg['user']['lpucode'];
+            $arg1['age'] = 1;
+            $arg1['lgg_code'] = 1;
+            $arg1['drcode'] = 1;
+            $arg1['refusal_reason'] = 1;
+            $arg1['disp_start'] = '';
+            $arg1['stage_1_result'] = '';
+            $arg1['stage_2_result'] = '';
+            $arg1['guid'] = '';
+            $arg1['speccode'] = '';
+
+            $this->InsertPatientStatus($arg1);
+
+        }
+    }
+
+    public function GeQuarterByDate($date){
+        $month = (int)date('m',strtotime($date));
+        if(($month>0)and($month<4)) return 1;
+        if(($month>3)and($month<7)) return 2;
+        if(($month>6)and($month<10)) return 3;
+        if($month>9) return 4;
+    }
+
+
+    public function GetCountPatientsInPlan($user,$year){
+
+        $sql="
+         select sum([status]) as kol,
+        sum(case when [disp_quarter] = 1 then 1 else 0 end) as kol1,
+	    sum(case when [disp_quarter] = 2 then 1 else 0 end) as kol2,
+	    sum(case when [disp_quarter] = 3 then 1 else 0 end) as kol3,
+	    sum(case when [disp_quarter] = 4 then 1 else 0 end) as kol4
+from
+ (SELECT status, disp_quarter, enp, id,
+ 	   row_number() over (partition  by enp order by id desc) as rn
+  FROM [DISP_WEB].[dbo].[disp_plan] p
+  where (disp_year = ".$year.")
+  and (p.disp_lpu = ".$user['lpucode']." )
+  ) x
+  where rn = 1 and status = 1
+        ";
+
+
+        $query = $this->db_mssql->conn_id->query($sql);
+        return $this->elex->row_array($query);
+
+    }
+
 }
+

@@ -42,6 +42,39 @@ class Dsp_patients extends CI_Controller {
         echo json_encode($res);
     }
 
+    /*формирует парамтры фильтра из post*/
+    public function GetFilterParams($data,$patient){
+        $arg=array();
+
+        if((isset($data['sort']))and($data['sort']!=''))
+            $arg['sort'] = $data['sort'];
+        else $arg['sort'] = 'surname';
+        if(isset($data['order']))$arg['order'] = $data['order'];
+
+        if(!isset($data['limit']))  $data['limit'] = 100;
+        if(!isset($data['offset']))  $data['offset'] = 0;
+
+        $arg['age_beg'] = 21;
+        $arg['age_end'] = 99;
+        if(isset($patient['age_beg'])) $arg['age_beg'] = $patient['age_beg'];
+        if(isset($patient['age_end'])) $arg['age_end']= $patient['age_end'];
+
+
+        $arg['month_beg'] = 1;
+        $arg['month_end'] = 12;
+        if(isset($patient['month_beg'])) $arg['month_beg'] = $patient['month_beg'];
+        if(isset($patient['month_end'])) $arg['month_end']= $patient['month_end'];
+
+
+        if(isset($patient['uch'])) $arg['uch']= $patient['uch'];
+
+        /*только 400 записей максимум*/
+        if((int)$data['limit']>400) $data['limit'] = 400;
+        if((int)$data['offset']<0) $data['offset'] = 0;
+
+        return array('arg'=>$arg,'data'=>$data);
+    }
+
     public function GetPatients() {
         $res = array();
         if($this->auth_model->IsLogin()) {
@@ -52,35 +85,11 @@ class Dsp_patients extends CI_Controller {
             $patient = $this->input->post('patient');
 
             if($data!='') {
-                $arg=array();
 
+                $d = $this->GetFilterParams($data,$patient);
+                $data = $d['data'];
+                $arg = $d['arg'];
                 $arg['lpucode'] = $res['user']['lpucode'];
-                if((isset($data['sort']))and($data['sort']!=''))
-                    $arg['sort'] = $data['sort'];
-                else $arg['sort'] = 'surname';
-                $arg['order'] = $data['order'];
-
-                if(!isset($data['limit']))  $data['limit'] = 100;
-                if(!isset($data['offset']))  $data['offset'] = 0;
-
-                $arg['age_beg'] = 21;
-                $arg['age_end'] = 99;
-                if(isset($patient['age_beg'])) $arg['age_beg'] = $patient['age_beg'];
-                if(isset($patient['age_end'])) $arg['age_end']= $patient['age_end'];
-
-
-                $arg['month_beg'] = 1;
-                $arg['month_end'] = 12;
-                if(isset($patient['month_beg'])) $arg['month_beg'] = $patient['month_beg'];
-                if(isset($patient['month_end'])) $arg['month_end']= $patient['month_end'];
-
-
-                if(isset($patient['uch'])) $arg['uch']= $patient['uch'];
-
-                /*только 400 записей максимум*/
-                if((int)$data['limit']>400) $data['limit'] = 400;
-                if((int)$data['offset']<0) $data['offset'] = 0;
-
                 $res['patients']['rows'] = $this->patient_model->GetPatients($arg,$data['limit'],$data['offset']);
                 if(count($res['patients']['rows'])>0)
                 {
@@ -180,6 +189,7 @@ class Dsp_patients extends CI_Controller {
             $res['auth'] = 1;
             $res['user'] = $this->auth_model->UserInfo();
             $res['patient'] = $this->patient_model->GetPatientByEnp($enp);
+            $res['test'] = date('Y-m-d',strtotime($res['patient']['BIRTHDAY']));
 
         } else {
             $res['auth'] = 0;
@@ -226,10 +236,7 @@ class Dsp_patients extends CI_Controller {
             $res['auth'] = 1;
             $res['user'] = $this->auth_model->UserInfo();
 
-            $res['pl_1'] = 0;
-            $res['pl_2'] = 0;
-            $res['pl_3'] = 0;
-            $res['pl_4'] = 0;
+            $res['plan'] = $this->patient_model->GetCountPatientsInPlan($res['user'],$this->input->post('disp_year'));
 
 
         } else {
@@ -237,5 +244,36 @@ class Dsp_patients extends CI_Controller {
         }
         echo json_encode($res);
     }
+
+    /*чекает всех в фильтре*/
+    public function CheckAllFromFilter(){
+        $res = array();
+        if ($this->auth_model->IsLogin()) {
+            $res['auth'] = 1;
+            $res['user'] = $this->auth_model->UserInfo();
+            $patient = $this->input->post('patient');
+
+
+            $d = $this->GetFilterParams(array(), $patient);
+
+            $arg = $d['arg'];
+            $arg['lpucode'] = $res['user']['lpucode'];
+            $arg['user'] = $res['user'];
+
+            $arg['status'] = $this->input->post('status');
+            $arg['disp_year'] = $this->input->post('disp_year');
+            $this->patient_model->CheckAllFromFilter($arg);
+        } else {
+            $res['auth'] = 0;
+        }
+        echo json_encode($res);
+    }
+
+    /*загрузка срезов*/
+    public function LoadSections(){
+
+    }
+
+
 
 }

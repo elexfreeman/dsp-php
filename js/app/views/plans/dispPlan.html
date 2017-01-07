@@ -124,7 +124,7 @@
                                     </div>
                                     <div class="col-xs-10">
                                         <div class="numbers">
-                                            <p>Кол-во отмеченных для включения в план: <b>0</b></p>
+                                            <p>Кол-во отмеченных для включения в план: <b><span id="pl_all"></span></b></p>
                                             <hr>
                                             <div class="row text-center">
                                                 <div class="col-xs-3 small"><p><b>I:</b><br><span id="pl_1"></span><br><span id="pl_P_1"></span>%</p></div>
@@ -209,7 +209,8 @@
                                 <table class="table table-striped table-hover" bs-table-control="bsTable" id="b1"></table>
                             </div>
                             <div class="content text-right" style="padding-top: 0">
-                                <button href="#fakelink" class="btn btn-fill btn-success">Взять в план всех из текущего фильтра</button>
+                                <button href="#fakelink" class="btn btn-fill btn-success" ng-click="CheckAllFromFilter()">Взять в план всех из текущего фильтра</button>
+                                <button href="#fakelink" class="btn btn-fill btn-error" ng-click="UnCheckAllFromFilter()">Убрать из плана всех из текущего фильтра</button>
                                 <button href="#fakelink" class="btn btn-fill btn-warning">Отправить в ТФОМС</button>
                             </div>
                         </div>
