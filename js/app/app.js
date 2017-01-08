@@ -42,6 +42,11 @@ dspApp.config([
                 templateUrl:views_url + 'loader/loader.html',
                 controller:'loaderCtrl'
             })
+            /*Спасибо*/
+            .when(base_url+'thx',{
+                templateUrl:views_url + 'loader/thx.html',
+                controller:'loaderCtrl'
+            })
             /*другая страница*/
             /*todo 303 redirect*/
             .otherwise({

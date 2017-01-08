@@ -299,11 +299,11 @@ class Dsp_patients extends CI_Controller {
                 }
             }
         } else {
-                 //header('Location: '.$this->root);
-                // exit;
+                 header('Location: '.$this->root);
+                exit;
         }
-       // header('Location: '.$this->root."/");
-      //  exit;
+        header('Location: '.$this->root."thx");
+        exit;
 
 
 
