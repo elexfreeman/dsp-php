@@ -6,6 +6,8 @@ class Dsp_patients extends CI_Controller {
 
     public $data;
 
+    public $root = '/dsp/';
+
     public function __construct()
     {
         parent::__construct();
@@ -17,6 +19,8 @@ class Dsp_patients extends CI_Controller {
         $this->load->model('patient_model');
         $this->load->helper('form');
         $this->load->helper('url');
+
+        $this->data['root'] = $this->root;
     }
 
 
@@ -271,9 +275,47 @@ class Dsp_patients extends CI_Controller {
 
     /*загрузка срезов*/
     public function LoadSections(){
+        $res = array();
+        if ($this->auth_model->IsLogin()) {
+            $res['auth'] = 1;
+            $res['user'] = $this->auth_model->UserInfo();
+            if(((isset($_FILES['f']['name'])))and($_FILES['f']['name']!=''))
+            {
+                $rnd=$this->elex->PassGen();
+                $uploadfile = $_SERVER['DOCUMENT_ROOT'].$this->root."img/sections/". $rnd.'_'.$this->elex->rus2translit(basename($_FILES['f']['name']));
+
+                if (move_uploaded_file($_FILES['f']['tmp_name'],$uploadfile))
+                {
+                    /*вставляем в таблицу*/
+                    $arg = array();
+                    $arg['lpu'] =  $res['user']['lpucode'];
+                    $arg['filename'] =  $uploadfile;
+                    $this->patient_model->InsertUpoadStatus($arg);
+
+                }
+                else
+                {
+                    //error
+                }
+            }
+        } else {
+                 //header('Location: '.$this->root);
+                // exit;
+        }
+       // header('Location: '.$this->root."/");
+      //  exit;
+
+
 
     }
 
 
+    public function PassGenAll(){
+        $users = $this->auth_model->GetAllUsers();
+        foreach($users as $key=>$u){
+            //$this->auth_model->UpdateUserPassword($u['username'],$this->elex->PassGen());
+
+        }
+    }
 
 }

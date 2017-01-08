@@ -117,9 +117,14 @@ class Auth_model extends CI_Model
 
     public function GetAllUsers()
     {
-        $sql="select * from ipre_users  order by login";
-        $query = $this->dbMySQL->query($sql);
-        return $query->result_array();
+        $sql="SELECT  [id]
+      ,[username]
+      ,[password]
+      ,[lpucode]
+      ,[group]
+  FROM [DISP_WEB].[dbo].[users]";
+        $query = $this->db_mssql->conn_id->query($sql);
+        return $this->elex->result_array($query);
     }
 
     public function UserInfo()
@@ -223,14 +228,21 @@ class Auth_model extends CI_Model
                 $sql_r = "insert into users_roots (id,user_root_id,user_id) values (NULL,".$user_id.",".$rr.")";
                 $this->dbMySQL->query($sql_r);
             }
-
         }
 
         foreach($sql as $s)
         {
             $this->dbMySQL->query($s);;
         }
+    }
 
+    public function UpdateUserPassword($user,$password){
+        $sql="UPDATE [DISP_WEB].[dbo].[users]
+           SET
+              [password] = '".$password."'
+
+         WHERE username = '".$user."'";
+        $this->db_mssql->conn_id->query($sql);
     }
 
 }

@@ -517,12 +517,27 @@ from
   ) x
   where rn = 1 and status = 1
         ";
-
-
         $query = $this->db_mssql->conn_id->query($sql);
         return $this->elex->row_array($query);
-
     }
+
+    public function InsertUpoadStatus($arg){
+        $now = date('Y-m-d H:i:s');
+        $sql="
+        INSERT INTO [dbo].[upload_erzl]
+           ([lpu]
+           ,[filename]
+           ,[upload_date])
+     VALUES
+           (".$arg['lpu']."
+           ,'".$arg['filename']."'
+           ,'".$now."')
+        ";
+        echo $sql;
+        $this->db_mssql->conn_id->query($sql);
+    }
+
+
 
 }
 
